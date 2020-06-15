@@ -1,18 +1,18 @@
 import React from 'react';
-import {Card, CardColumns, Button, Nav, Row,Col, InputGroup, FormControl, Form} from 'react-bootstrap';
+import {Card, CardColumns, Button, Nav, Row,Col, InputGroup, Form} from 'react-bootstrap';
 //задание компонента через класс
 class List extends React.Component {
   constructor(props) {
   		super(props); //вызвать конструктор наследуемого класса, те React.Component
-
-  		this.state = {
+      console.log( localStorage.getItem('tasks'));
+      let tasks =  localStorage.getItem('tasks')? JSON.parse(localStorage.getItem('tasks')) :   [{text:"создать первую задачу", kind:'🦟', important: 1}];
+  console.log( tasks);
+      this.state = {
         edited: null,
         filter:'all',
-  			tasks: [
-            {text:"создать первую задачу", kind:'🦟', important: 1 },
-            {text:"создать вторую задачу asd asd asdasd sdasdasdcsdcaxsdcsx qsdsxc qasdcx zdqeadsvcx zcsadqwasc xzq3eadzcvasd   sdasdzxc c", kind:'🌕', important: 0}]
-  		};
-
+  			tasks: tasks
+        };
+  console.log( this.state);
       this.input = React.createRef();
       this.important = React.createRef();
       this.kind = React.createRef();
@@ -23,6 +23,7 @@ class List extends React.Component {
       this.setState({edited:null});
     }
     else{
+      if(this.input.current.value==='') return false;
       let new_task ={
         'text':  this.input.current.value,
         'important': this.important.current.value,
@@ -34,6 +35,7 @@ class List extends React.Component {
       console.log(new_task);
       let tasks = this.state.tasks.slice();
       tasks.push(new_task);
+      localStorage.setItem('tasks', JSON.stringify(tasks));
       this.setState({tasks});
     }
   }
@@ -59,7 +61,9 @@ class List extends React.Component {
     }else{
       tasks[id][field] = value;
     }
+    localStorage.setItem('tasks', JSON.stringify(tasks));
     this.setState({tasks});
+
   }
 
 
@@ -126,6 +130,7 @@ class List extends React.Component {
         </Col>
       </Row>
       <Row>
+        <Col>
          <Nav variant="tabs" defaultActiveKey="#all">
           <Nav.Item>
             <Nav.Link href="#all" onClick={()=>this.changeState('filter','all')}> Все </Nav.Link>
@@ -140,6 +145,9 @@ class List extends React.Component {
             <Nav.Link href="#finished" onClick={()=>this.changeState('filter','finished')}> Сделанные </Nav.Link>
           </Nav.Item>
         </Nav>
+        </Col>
+      </Row>
+      <Row>
          <CardColumns className="m-3">
            {list}
         </CardColumns>
