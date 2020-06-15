@@ -9,15 +9,34 @@ class List extends React.Component {
         edited: null,
         filter:'all',
   			tasks: [
-            {text:"создать первую задачу", kind:'🦟', important: 1, date: new Date().getTime() },
-            {text:"создать вторую задачу asd asd asdasd sdasdasdcsdcaxsdcsx qsdsxc qasdcx zdqeadsvcx zcsadqwasc xzq3eadzcvasd   sdasdzxc c", kind:'🌕', important: 0, date: new Date().getTime() }]
+            {text:"создать первую задачу", kind:'🦟', important: 1 },
+            {text:"создать вторую задачу asd asd asdasd sdasdasdcsdcaxsdcsx qsdsxc qasdcx zdqeadsvcx zcsadqwasc xzq3eadzcvasd   sdasdzxc c", kind:'🌕', important: 0}]
   		};
 
-    this.input = React.createRef();
-    this.kind = React.createRef();
+      this.input = React.createRef();
+      this.important = React.createRef();
+      this.kind = React.createRef();
   	}
 
-
+  saveTask(){
+    if(this.state.edited){
+      this.setState({edited:null});
+    }
+    else{
+      let new_task ={
+        'text':  this.input.current.value,
+        'important': this.important.current.value,
+        'kind': this.kind.current.value,
+      }
+       this.input.current.value="";
+       this.important.current.value="";
+       this.kind.current.value="";
+      console.log(new_task);
+      let tasks = this.state.tasks.slice();
+      tasks.push(new_task);
+      this.setState({tasks});
+    }
+  }
 
   changeState(key, value){
       if(key === 'filter'){
@@ -53,7 +72,7 @@ class List extends React.Component {
         return (
         <Card key={index} border={item.important && 'danger'} text={item.finished && 'success'} bg={item.finished && 'light'}>
           <Card.Header className="py-1">
-            <div className="float-left" >{item.kind}</div>
+            <div className="float-left emoji" >{item.kind}</div>
             <div className="importantBlock float-right emoji" onClick={()=>this.setTaskField(index,'important', !item.important)}>{item.important  ? '⭐'  : '☆' }</div>
             <div className="importantBlock float-right emoji" onClick={()=>this.setState({edited:index})}> ✏ </div>
 
@@ -80,21 +99,28 @@ class List extends React.Component {
 
           <Form.Control placeholder='текст новой задачи'
             value={taskEdited.text? taskEdited.text: null}
-            onChange={(e)=>this.setTaskField(this.state.edited,'text', e.target.value)}
+            ref={this.input}
+            onChange={(e)=>(this.state.edited && this.setTaskField(this.state.edited,'text', e.target.value))}
           />
             <InputGroup.Append>
-            <Form.Control as="select" custom onChange={(e)=>this.setTaskField(this.state.edited,'important', (e.target.value=='⭐'?1:0))}>
+            <Form.Control as="select" custom
+              ref={this.important}
+              onChange={(e)=>(this.state.edited && this.setTaskField(this.state.edited,'important', (e.target.value=='⭐'?1:0)))}
+              >
               <option > ☆ </option>
               <option selected={taskEdited.important && true}>⭐</option>
             </Form.Control>
-              <Form.Control as="select" custom  onChange={(e)=>this.setTaskField(this.state.edited,'kind', e.target.value)}>
+              <Form.Control as="select" custom
+                ref={this.kind}
+                onChange={(e)=>(this.state.edited && this.setTaskField(this.state.edited,'kind', e.target.value))}
+              >
                 <option selected={taskEdited.kind=='🦟' && 'selected'}>🦟</option>
                 <option selected={taskEdited.kind=='🌕' && 'selected'}>🌕</option>
                 <option selected={taskEdited.kind=='🌷' && 'selected'}>🌷</option>
                 <option selected={taskEdited.kind=='⁉' && 'selected'}>⁉</option>
                 <option selected={taskEdited.kind=='🦄' && 'selected'} >🦄</option>
               </Form.Control>
-              <Button variant="outline-secondary">сохр.</Button>
+              <Button variant="outline-secondary" onClick={()=>this.saveTask()}>сохр.</Button>
             </InputGroup.Append>
           </InputGroup>
         </Col>
