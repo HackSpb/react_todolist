@@ -30,11 +30,11 @@ class List extends React.Component {
         'kind': this.kind.current.value,
       }
        this.input.current.value="";
-       this.important.current.value="";
-       this.kind.current.value="";
+       this.important.current.value="☆";
+       this.kind.current.value="🦟";
       console.log(new_task);
       let tasks = this.state.tasks.slice();
-      tasks.push(new_task);
+      tasks.unshift(new_task);
       localStorage.setItem('tasks', JSON.stringify(tasks));
       this.setState({tasks});
     }
@@ -82,11 +82,11 @@ class List extends React.Component {
 
 
           </Card.Header>
-          <Card.Body>
+          <Card.Body >
             <Card.Text>{item.text}</Card.Text>
-            <Button size="sm" variant="danger" className="float-left emoji" onClick={()=>this.setTaskField(index,'delete', true)}><span role="img" aria-label="ok">🗑</span></Button>
+            <Button size="sm" variant="danger" className="float-left emoji mb-1" onClick={()=>this.setTaskField(index,'delete', true)}><span role="img" aria-label="ok">🗑</span></Button>
 
-            <Button size="sm" variant="success" className="float-right emoji" onClick={()=>this.setTaskField(index,'finished', !item.finished)}><span role="img" aria-label="ok">👌</span></Button>
+            <Button size="sm" variant="success" className="float-right emoji mb-1" onClick={()=>this.setTaskField(index,'finished', !item.finished)}><span role="img" aria-label="ok">👌</span></Button>
           </Card.Body>
         </Card>
       )});
@@ -98,20 +98,23 @@ class List extends React.Component {
 
       <>
       <Row>
-        <Col>
-        <InputGroup className="my-3">
 
+
+        <Col  md="8" className="py-3">
           <Form.Control placeholder='текст новой задачи'
             value={taskEdited.text? taskEdited.text: null}
             ref={this.input}
             onChange={(e)=>(this.state.edited && this.setTaskField(this.state.edited,'text', e.target.value))}
           />
+          </Col>
+          <Col  md="4" className="py-3">
+          <InputGroup>
             <InputGroup.Append>
             <Form.Control as="select" custom
               ref={this.important}
               onChange={(e)=>(this.state.edited && this.setTaskField(this.state.edited,'important', (e.target.value=='⭐'?1:0)))}
               >
-              <option > ☆ </option>
+              <option >☆</option>
               <option selected={taskEdited.important && true}>⭐</option>
             </Form.Control>
               <Form.Control as="select" custom
@@ -124,10 +127,12 @@ class List extends React.Component {
                 <option selected={taskEdited.kind=='⁉' && 'selected'}>⁉</option>
                 <option selected={taskEdited.kind=='🦄' && 'selected'} >🦄</option>
               </Form.Control>
-              <Button variant="outline-secondary" onClick={()=>this.saveTask()}>сохр.</Button>
+              <Button  onClick={()=>this.saveTask()}>сохр.</Button>
             </InputGroup.Append>
-          </InputGroup>
-        </Col>
+            </InputGroup>
+            </Col>
+
+
       </Row>
       <Row>
         <Col>
