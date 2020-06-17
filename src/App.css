@@ -8,8 +8,10 @@
   height:35px;
 }
 
+@font-face {font-family: "NotoEmoji"; src: url("//db.onlinewebfonts.com/t/7e95ad5934d900bc13b364eb5f1fe318.eot"); src: url("//db.onlinewebfonts.com/t/7e95ad5934d900bc13b364eb5f1fe318.eot?#iefix") format("embedded-opentype"), url("//db.onlinewebfonts.com/t/7e95ad5934d900bc13b364eb5f1fe318.woff2") format("woff2"), url("//db.onlinewebfonts.com/t/7e95ad5934d900bc13b364eb5f1fe318.woff") format("woff"), url("//db.onlinewebfonts.com/t/7e95ad5934d900bc13b364eb5f1fe318.ttf") format("truetype"), url("//db.onlinewebfonts.com/t/7e95ad5934d900bc13b364eb5f1fe318.svg#Noto Emoji") format("svg"); }
+
 .emoji {
-  font-family: "Noto Color Emoji", "Apple Color Emoji", "Segoe UI Emoji", Times, Symbola, Aegyptus, Code2000, Code2001, Code2002, Musica, serif, LastResort;
+  font-family: "Apple Color Emoji", "Segoe UI Emoji", "JoyPixels", "Noto Color Emoji", "NotoEmoji", "Emojione", "Twemoji", "Symbola";
   font-weight: bold;
   cursor: pointer;
 }

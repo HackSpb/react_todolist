@@ -19,25 +19,24 @@ class List extends React.Component {
   	}
 
   saveTask(){
-    if(this.state.edited){
+    if(this.state.edited!==null){
       this.setState({edited:null});
-    }
-    else{
-      if(this.input.current.value==='') return false;
+    }else{
+    if(this.input.current.value==='') return false;
       let new_task ={
         'text':  this.input.current.value,
         'important': this.important.current.value,
         'kind': this.kind.current.value,
       }
-       this.input.current.value="";
-       this.important.current.value="☆";
-       this.kind.current.value="🦟";
       console.log(new_task);
       let tasks = this.state.tasks.slice();
       tasks.unshift(new_task);
       localStorage.setItem('tasks', JSON.stringify(tasks));
       this.setState({tasks});
     }
+    this.input.current.value="";
+    this.important.current.value="☆";
+    this.kind.current.value="🦟";
   }
 
   changeState(key, value){
@@ -104,7 +103,7 @@ class List extends React.Component {
           <Form.Control placeholder='текст новой задачи'
             value={taskEdited.text? taskEdited.text: null}
             ref={this.input}
-            onChange={(e)=>(this.state.edited && this.setTaskField(this.state.edited,'text', e.target.value))}
+            onChange={(e)=>{this.state.edited!==null && this.setTaskField(this.state.edited,'text', e.target.value)} }
           />
           </Col>
           <Col  md="4" className="py-3">
@@ -112,14 +111,14 @@ class List extends React.Component {
             <InputGroup.Append>
             <Form.Control as="select" custom
               ref={this.important}
-              onChange={(e)=>(this.state.edited && this.setTaskField(this.state.edited,'important', (e.target.value=='⭐'?1:0)))}
+              onChange={(e)=>(this.state.edited!==null && this.setTaskField(this.state.edited,'important', (e.target.value=='⭐'?1:0)))}
               >
               <option >☆</option>
               <option selected={taskEdited.important && true}>⭐</option>
             </Form.Control>
               <Form.Control as="select" custom
                 ref={this.kind}
-                onChange={(e)=>(this.state.edited && this.setTaskField(this.state.edited,'kind', e.target.value))}
+                onChange={(e)=>(this.state.edited!==null && this.setTaskField(this.state.edited,'kind', e.target.value))}
               >
                 <option selected={taskEdited.kind=='🦟' && 'selected'}>🦟</option>
                 <option selected={taskEdited.kind=='🌕' && 'selected'}>🌕</option>
